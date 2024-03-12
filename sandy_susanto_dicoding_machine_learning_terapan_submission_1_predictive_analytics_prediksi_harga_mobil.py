@@ -230,9 +230,9 @@ print("Nilai 0 di kolom mileage ada: ", ml)
 print("Nilai 0 di kolom cylinders ada: ", cl)
 print("Nilai 0 di kolom airbags ada: ", ab)
 
-"""Ada **2405 kolom** *airbags* yang tidak diketahui. Oleh karena itu, data-data yang tidak diketahui akan dihilangkan dari *dataset*."""
+"""Ada **2405 kolom** *airbags*, **10 kolom** *engine volume*, dan **721 kolom** *mileage* yang tidak diketahui. Oleh karena itu, data-data yang tidak diketahui akan dihilangkan dari *dataset*."""
 
-car = car.loc[(car[['Mileage','Airbags']]!=0).all(axis=1)]
+car = car.loc[(car[['Engine volume', 'Mileage', 'Airbags']]!=0).all(axis=1)]
 
 car.shape
 
@@ -277,7 +277,7 @@ car = car[~((car < (Q1 - 1.5*IQR)) | (car > (Q3 + 1.5*IQR))).any(axis=1)]
 
 car.shape
 
-"""Diperoleh data yang telah dibersihkan sebanyak 11346 sampel."""
+"""Diperoleh data yang telah dibersihkan sebanyak 11288 sampel."""
 
 fig, axes = plt.subplots(3, 2, figsize=(14, 12))
 sns.boxplot(ax=axes[0,0], x=car['Price'])
@@ -442,7 +442,7 @@ heatmap = sns.heatmap(
 
 heatmap.set_title('Matriks Korelasi untuk Fitur Numerik', fontsize=20)
 
-"""Diagram *heatmap* yang ditampilkan memiliki angka 1 dan 0.05, yang mengindikasikan tingkat korelasi antara variabel numerik dengan cara berikut:
+"""Diagram *heatmap* yang ditampilkan memiliki angka dari -0.25 hingga 1, yang mengindikasikan tingkat korelasi antara variabel numerik dengan cara berikut:
 - Nilai yang mendekati 1 menandakan adanya korelasi positif yang kuat antara dua variabel, di mana keduanya cenderung meningkat secara bersamaan.
 - Nilai yang mendekati 0 menunjukkan bahwa tidak ada korelasi yang signifikan antara dua variabel.
 - Nilai yang mendekati -1 menunjukkan korelasi negatif yang kuat, di mana satu variabel cenderung meningkat sementara yang lainnya menurun.
@@ -574,7 +574,7 @@ Evaluasi model regresi pada dasarnya cukup mudah dipahami. Pada intinya, sebagia
 # Terapkan normalisasi pada data numerik dalam X_test agar nilai rata-ratanya menjadi nol dan variansnya satu
 X_test.loc[:, numericalFeatures] = scaler.transform(X_test[numericalFeatures])
 
-"""Evaluasi performa tiga model pembelajaran mesin: *K-Nearest Neighbor, Random Forest*, dan *AdaBoost*, pada set data pelatihan dan pengujian dengan mengukur tingkat kesalahan mereka melalui *Mean Squared Error* (MSE)."""
+"""Evaluasi performa tiga model pembelajaran mesin: *K-Nearest Neighbor, Random Forest*, dan *AdaBoost*, pada set data pelatihan dan pengujian dengan mengukur tingkat kesalahan ketiga algoritma tersebut melalui *Mean Squared Error* (MSE)."""
 
 mse = pd.DataFrame(columns=['train', 'test'], index=['KNN','RF','Boosting'])
 
@@ -609,7 +609,7 @@ pd.DataFrame(pred_dict)
 
 """Dapat dilihat prediksi pada model dengan algoritma *K-Nearest Neighbor* memberikan hasi yang paling mendekati dengan nilai `y_true` jika dibandingkan dengan algoritma model yang lainnya.
 
-Nilai `y_true` sebesar **20698.0** dan nilai prediksi `*K-Nearest Neighbor*` sebesar **17346.6**.
+Nilai `y_true` sebesar **26594.0** dan nilai prediksi `*K-Nearest Neighbor*` sebesar **24513.1**.
 
-Meskipun diagram `MSE` menunjukan *Random Forest* memiliki error paling kecil dibanding algoritma lainnya, ketika dilakukan pengujian justru *K-Nearest Neighbor* menghasilkan prediksi yang lebih mendekati `y_true`. Nilai *error* dari *Random Forest* dan *K-Nearest Neighbor* tidak terlampau jauh dan angkanya masih dalam puluh ribuan, sehingga *gap* hasil prediksi kedua algoritma tersebut pada dataset ini tidak terlalu berbeda jauh.
+Meskipun diagram `MSE` menunjukan *Random Forest* memiliki error paling kecil dibanding algoritma lainnya, ketika dilakukan pengujian justru *K-Nearest Neighbor* menghasilkan prediksi yang lebih mendekati `y_true`.
 """
