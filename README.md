@@ -34,8 +34,10 @@ Dari permasalahan yang telah diuraikan, tujuan yang ingin dicapai melalui proyek
 
 Dari uraian sebelumnya, beberapa langkah strategis telah diidentifikasi untuk mencapai target proyek, antara lain:
 1. Proses persiapan data akan meliputi teknik-teknik berikut:
+   - One-hot-encoding untuk memtransformasikan fitur kategorikal menjadi fitur yang lebih detail dalam mempresentasikan kategori.
    - Pembagian dataset menjadi dua bagian, yaitu set pelatihan dan set pengujian dengan proporsi 90% untuk pelatihan dan 10% untuk pengujian, yang akan digunakan dalam pengembangan model *machine learning*.
    - Standardisasi nilai pada fitur numerik untuk menghindari deviasi yang signifikan pada data.
+   - Reduksi dimensi untuk mengurangi jumlah variabel dalam data sambil memastikan informasi penting tetap terjaga.
 2. Dalam fase pembuatan model *machine learning*, tiga model yang menggunakan algoritma yang berbeda akan diuji. Algoritma yang akan diaplikasikan meliputi Algoritma K-Nearest Neighbor, Algoritma Random Forest, dan Algoritma Adaptive Boosting. Setelah evaluasi kinerja masing-masing model, algoritma yang memberikan akurasi prediksi terbaik akan dipilih sebagai model utama.
    - **Algoritma K-Nearest Neighbor (KNN)**  
 Algoritma KNN merupakan metode klasifikasi yang tidak bergantung pada parameter tertentu dan berada di bawah kategori pembelajaran dengan pengawasan. Algoritma ini memanfaatkan jarak antar titik data untuk menentukan klasifikasi atau prediksi kelompok dari sebuah titik data. Algoritma ini termasuk metode yang populer dan mudah digunakan dalam *machine learning* untuk klasifikasi dan regresi. Walaupun algoritma KNN bisa digunakan untuk regresi maupun klasifikasi, umumnya lebih sering digunakan untuk klasifikasi. Algoritma ini beroperasi berdasarkan prinsip bahwa titik-titik data yang mirip biasanya berdekatan [[4]](https://www.ibm.com/topics/knn).
@@ -85,173 +87,249 @@ Algoritma KNN merupakan metode klasifikasi yang tidak bergantung pada parameter 
      $$\hat{f}=\frac{1}{B}\sum_{b=1}^{B} f_b(x^{'})$$
      
    - **Algoritma Adaptive Boosting**  
-     Algoritma Adaptive Boosting atau biasanya disingkat AdaBoost merupakan algoritma yang melakukan pelatihan model secara berurutan dan dengan proses iteratif atau berulang. Data latih (*training data*) akan mempunyai bobot atau *weight* yang sama, kemudian model akan melakukan pemeriksaan. Bobot yang lebih tinggi akan dimasukkan ke dalam model yang salah, sehingga akan lanjut ke tahap selanjutnya. Proses iteratif tersebut akan terus berlanjut hingga model mencapai tingkat akurasi yang diinginkan.
+     AdaBoost, yang merupakan kependekan dari *Adaptive Boosting*, merupakan teknik ansambel dalam *machine learning* yang serbaguna, cocok untuk tugas-tugas klasifikasi dan regresi. Sebagai algoritma pembelajaran dengan pengawasan, AdaBoost menggabungkan sejumlah pembelajar dasar, seperti *decision tree*, untuk membentuk model yang lebih kuat. Cara kerja AdaBoost adalah dengan menyesuaikan bobot data latih sesuai dengan keakuratan klasifikasi yang telah dilakukan sebelumnya [[8]](https://www.almabetter.com/bytes/tutorials/data-science/adaboost-algorithm).
      
      <img src="https://user-images.githubusercontent.com/64983961/188507801-30224052-cac2-4e99-9c67-2aec18de8e59.png" alt="Ilustrasi Algoritma Adaptive Boosting" title="Ilustrasi Algoritma Adaptive Boosting">
      
-     Algoritma AdaBoost mengacu kepada metode tertentu untuk melakukan pelatihan *classifier* yang di-*boosted*. Pengklasifikasian tersebut adalah pengklasifikasian dalam bentuk, [[7]](https://en.wikipedia.org/wiki/AdaBoost#Training 'AdaBoost - Training')
+     Algoritma AdaBoost mengacu kepada metode tertentu untuk melakukan pelatihan *classifier* yang di-*boosted*. Pengklasifikasian tersebut adalah pengklasifikasian dalam bentuk, [[9]](https://en.wikipedia.org/wiki/AdaBoost#Training 'AdaBoost - Training')
      $$F_T(x)=\sum_{t=q}^{T}f_t(x)$$
      di mana setiap $F_T$ adalah *learner* yang lemah yang mengambil objek $x$ sebagai input dan mengembalikan nilai yang menunjukkan kelas objek. Demikian juga pada pengklasifikasi $T$ merupakan nilai positif jika sampel berada dalam kelas positif, dan negatif jika sebaliknya.
 
-## Data Understanding
+# Data Understanding
 
-<img src="https://user-images.githubusercontent.com/64983961/188505289-4725df5e-9e3a-48b9-b261-e538fd0c6fb9.png" alt="Electric Power Consumption Kaggle Dataset" title="Electric Power Consumption Kaggle Dataset" width="100%">
+![Dataset](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/3aca9dff-0179-4bbc-b0bf-afe5570ec676)
 
-Data yang digunakan dalam proyek ini adalah *dataset* yang diambil dari Kaggle Dataset [Electric Power Consumption](https://www.kaggle.com/datasets/fedesoriano/electric-power-consumption 'Time series analysis of power consumption') dengan kategori *dataset*, yaitu *Energy* dan *Electricity*. Dalam *dataset* tersebut terdapat sebuah *file* atau berkas dengan nama `powerconsumption.csv` yang berekstensi (*file format*) `.csv` atau [comma-separated values](https://en.wikipedia.org/wiki/Comma-separated_values 'Comma-separated values') berukuran 4,33 MB.
+*Dataset* yang digunakan adalah [Car Price Prediction Challenge](https://www.kaggle.com/datasets/deepcontractor/car-price-prediction-challenge) dalam bentuk `.csv` ([Comma-separated Values](https://en.wikipedia.org/wiki/Comma-separated_values)). 
 
-Dari *dataset* tersebut, masih perlu dilakukan penyesuaian hingga *dataset* dapat benar-benar digunakan. Beberapa penyesuaian tersebut, yaitu
-- Menghapus kolom yang tidak digunakan dalam model, yaitu kolom `GeneralDiffuseFlows`, dan kolom `DiffuseFlows`.
+*Dataset* tersebut masih perlu disesuaikan lagi sebelum digunakan. Berikut penyesuaian-penyesuaian yang dilakukan
+- Menghapus kolom yang tidak ada digunakan karena tidak relevan, sama saja dengan kolom lain, dan tidak menjelaskan apapun, yaitu `ID`, `Levy`, `Manufacturer`, `Model`, dan `Prod. year`
   ```python
-   epower.drop('GeneralDiffuseFlows', inplace=True, axis=1)
-   epower.drop('DiffuseFlows',        inplace=True, axis=1)
+      car.drop('ID'          , inplace=True, axis=1)
+      car.drop('Levy'        , inplace=True, axis=1)
+      car.drop('Manufacturer', inplace=True, axis=1)
+      car.drop('Model'       , inplace=True, axis=1)
+      car.drop('Prod. year'  , inplace=True, axis=1)
    ```
-- Mengubah format atau tipe data pada kolom `Datetime` dari format `string` menjadi `datetime`.
+- Menghilangkan tulisan 'km' dan mengubah tipe data menjadi `int64` dan `float64` supaya lebih mudah untuk melakukan prediksi
   ```python
-  epower.Datetime = pd.to_datetime(epower.Datetime)
-  ```
-- Melakukan penguraian atau pemisahan kolom `Datetime` menjadi `Year`, `Month`, `Day`, `Hour`, dan `Minute`, lalu menghapus atau membuang (*drop*) kolom `Datetime`.
-  ```python
-  epower['Year']   = epower['Datetime'].apply(lambda date: date.year)
-  epower['Month']  = epower['Datetime'].apply(lambda date: date.month)
-  epower['Day']    = epower['Datetime'].apply(lambda date: date.day)
-  epower['Hour']   = epower['Datetime'].apply(lambda date: date.hour)
-  epower['Minute'] = epower['Datetime'].apply(lambda date: date.minute)
+     car['Price'] = car['Price'].astype('float64')
+     car['Engine volume'] = car['Engine volume'].str.replace(' Turbo', '').astype('float64')
+     car['Mileage'] = car['Mileage'].str.replace(' km', '').astype('float64')
+     car['Cylinders'] = car['Cylinders'].astype('int64')
   ```
 
-Kemudian dilakukan proses *Exploratory Data Analysis* (EDA) sebagai investigasi awal untuk menganalisis karakteristik, menemukan pola, anomali, dan memeriksa asumsi pada data dengan menggunakan teknik statistik dan representasi grafis atau visualisasi.
+Langkah selaunjutnya proses *Exploratory Data Analysis* (EDA). EDA adalah proses investigasi awal pada data untuk mengidentifikasi pola, menemukan anomali, menguji hipotesis, dan memeriksa asumsi dengan menggunakan statistik ringkasan dan representasi grafis.
 
 1. **Deskripsi Variabel**  
-   Berikut adalah informasi mengenai variabel-variabel yang terdapat pada *dataset* *Electric Power Consumption* adalah sebagai berikut,
+   Melakukan pengecekan informasi dari *dataframe* `car`
    
-   <img src="https://user-images.githubusercontent.com/64983961/188505396-dda2d93c-9266-4c80-bb67-6f7ae4e6e8aa.png" alt="Deskripsi Variabel" title="Deskripsi Variabel">
-   
-   Dari gambar di atas dapat dilihat bahwa terdapat 52.416 baris data dan 10 kolom atribut atau fitur. Di antaranya adalah enam (6) atribut/variabel dengan tipe data `float64 non-null` dan lima (5) atribut/variabel dengan tipe data `int64 non-null` yang merupakan hasil penguraian dari variabel `Datetime` yang sebelumnya memiliki tipe data `datetime64[ns]`. Berikut adalah keterangan untuk masing-masing variabel,
-   - `Temperature` : Temperatur
-   - `Humidity`    : Kelembaban
-   - `WindSpeed`   : Kecepatan angin
-   - `PowerConsumption_Zone1` : Konsumsi daya listrik di stasiun Quads, Tétouan, Maroko
-   - `PowerConsumption_Zone2` : Konsumsi daya listrik di stasiun Smir, Tétouan, Maroko
-   - `PowerConsumption_Zone3` : Konsumsi daya listrik di stasiun Boussafou, Tétouan, Maroko
-   - `Year`   : Tahun
-   - `Month`  : Bulan
-   - `Day`    : Tanggal
-   - `Hour`   : Jam
-   - `Minute` : Menit
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/d4402fb7-3c4e-4398-90fb-96aba87cb8a9)
+
+   Dari *dataset* yang telah dibersihkan, terdapat 19.237 baris data dengan atribut sebanyak 13 kolom. Terdapat 2 atribut dengan tipe data `int64`, 3 atribut dengan tipe data `float64` dan 8 atribut dengan tipe data `object`. Berikut adalah keterangan untuk masing-masing variabel,
+      - `Price` : Harga jual mobil dalam $
+      - `Category` : Kategori mobil, seperti SUV, sedan, hatchback, dll
+      - `Leather interior` : Menunjukkan apakah mobil memiliki interior kulit atau tidak.
+      - `Fuel type` : Jenis bahan bakar yang digunakan mobil
+      - `Engine volume` : Volume mesin mobil, diukur dalam liter
+      - `Mileage` : Jarak tempuh mobil dalam KM
+      - `Cylinders` : Jumlah silinder dalam mesin mobil.
+      - `Gear box type` : Jenis kotak gigi/transmisi, seperti manual, otomatis, atau semi-otomatis.
+      - `Drive wheels` : Jenis penggerak roda, seperti penggerak roda depan, belakang, atau semua roda.
+      - `Doors` : Jumlah pintu pada mobil.
+      - `Wheel` : Jenis roda yang digunakan, bisa juga merujuk pada *steering wheel* (kiri atau kanan).
+      - `Color` : Warna eksterior mobil.
+      - `Airbags` : Jumlah kantung udara keselamatan yang tersedia di mobil.
    
 2. **Deskripsi Statistik**  
    
-   <img src="https://user-images.githubusercontent.com/64983961/188506144-7b2f5f52-be07-47ef-96a5-c65dbba6452a.png" alt="Deskripsi Statistik" title="Deskripsi Statistik">
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/a997ee50-3f32-451f-97e3-916bd46959f2)
+
+   Melihat deskripsi statistik dari *dataframe* `car` yaitu,
+   -  `count` : Jumlah data
+   -  `mean` : Rata-rata
+   -  `std` : Standar deviasi/simpangan baku
+   -  `min` : Nilai minimum
+   -  `25%` : Kuartil bawah/Q1
+   -  `50%` : Kuartil tengah/Q2/median
+   -  `75%` : Kuartil atas/Q3
+   -  `max` : Nilai maksimum
    
 3. **Menangani Missing Value**  
    
-   <img src="https://user-images.githubusercontent.com/64983961/188506196-0c2457b4-123c-4e13-8954-5edb04c0ed17.png" alt="Menangani Missing Value" title="Menangani Missing Value">
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/7720f307-9d09-40d5-87f8-ed3119d23946)
    
-   Berdasarkan gambar tersebut, tidak terdapat *missing value*.
+   Ada **2405 kolom** *airbags*, **10 kolom** *engine volume*, dan **721 kolom** *mileage* yang tidak diketahui. Oleh karena itu, data-data yang tidak diketahui akan dihilangkan dari *dataset*.
+   ```python
+   car = car.loc[(car[['Engine volume', 'Mileage', 'Airbags']]!=0).all(axis=1)]
+   ```
    
 4. **Menangani Outliers**  
-   *Outliers* merupakan sampel data yang nilainya berada sangat jauh dari cakupan umum data utama yang dapat merusak hasil analisis data. Berikut adalah visualisasi *boxplot* untuk melakukan pengecekan keberadaan *outliers*.
+   Untuk memeriksa keberadaan data yang menyimpang atau *outliers* dalam *dataframe* `car` dapat menggunakan visualisasi data berupa [`boxplot`](https://seaborn.pydata.org/generated/seaborn.boxplot.html) yang dibantu oleh *library* [`seaborn`](https://seaborn.pydata.org/). *Outliers* adalah nilai-nilai yang sangat berbeda dari sebagian besar data dan bisa mempengaruhi hasil analisis secara keseluruhan. Visualisasi dengan `boxplot` memungkinkan kita untuk mengidentifikasi dan mengevaluasi *outliers* ini secara efektif.
    
-   <img src="https://user-images.githubusercontent.com/64983961/188506260-f27e7d3d-e16e-42e7-a31e-8812f2aca7ea.png" alt="Menangani Outliers - Sebelum" title="Menangani Outliers - Sebelum">
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/7c9839f4-df1b-48f3-87b2-235553b3ea8f)
      
-   Berdasarkan gambar tersebut, terdapat *outliers* pada fitur `Temperature`, `Humidity`, `PowerConsumption_Zone2`, dan `PowerConsumption_Zone3`. Sehingga dilakukan proses pembersihan *outliers* dengan metode IQR (*Inter Quartile Range*).
-   
+   Dari diagram boxplot yang ditampilkan, terlihat bahwa pada variabel numerik yang menunjukkan adanya nilai-nilai *outlier*, yaitu data yang jauh berbeda dari nilai-nilai lainnya dalam kumpulan data tersebut.
+
+   Untuk mengidentifikasi dan menangani *outliers*, pendekatan yang digunakan adalah metode IQR, atau *Inter Quartile Range*.
    $$IQR=Q_3-Q_1$$
    
-   Kemudian membuat batas bawah dan batas atas untuk mencakup *outliers* dengan menggunakan,
+   Selanjutnya, batas bawah dan batas atas ditetapkan untuk mengelilingi *outliers*.
    
-   $BatasBawah=Q_1-1.5*IQR$
+   $$BatasBawah=Q_1-1.5*IQR$$
    
-   $BatasAtas=Q_3-1.5*IQR$
+   $$BatasAtas=Q_3-1.5*IQR$$
+
+   Metode ini memungkinkan identifikasi nilai yang berada di luar jangkauan normal data.
    
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/27013af8-eae8-453c-af4f-c222b85c6e98)
    
-   Setelah dilakukan pembersihan *outliers*, dilakukan kembali visualisasi *outliers* untuk melakukan pengecekan kembali sebagai berikut,
-   
-   <img src="https://user-images.githubusercontent.com/64983961/188506280-e40fe70d-804c-457e-a6f3-7a89d425950d.png" alt="Menangani Outliers - Sesudah" title="Menangani Outliers - Sesudah">
-   
-   Dari gambar di atas dapat dilihat bahwa *outliers* telah berkurang. Meskipun *outliers* masih terdapat pada fitur `Temperatur`, `Humidity`, `PowerConsumption_Zone2`, dan `PowerConsumption_Zone3`, tetapi masih dalam batas aman.
+   Setelah membersihkan *outliers* dengan metode IQR, atau *Inter Quartile Range*, terlihat bahwa jumlah *outliers* pada boxplot telah menurun. Walaupun masih terdapat *outliers* pada variabel `price`, `engine volume`, dan `mileage`, nilai-nilai tersebut masih berada dalam rentang yang dianggap aman.
    
 5. **Univariate Analysis**  
-   Melakukan proses analisis data *univariate* pada fitur-fitur numerik. Proses analisis ini menggunakan bantuan visualisasi histogram untuk masing-masing fitur numerik.
-   
-   <img src="https://user-images.githubusercontent.com/64983961/188506395-dae2772e-f61a-4ce2-b6ad-26acaa99c319.png" alt="Univariate Analysis" title="Univariate Analysis">
-   
-   Dari data histogram di atas diperoleh informasi, yaitu:
-   - Temperatur menunjukkan *zero-skewed* atau histogram simetris/normal.
-   - Lebih dari 50% data kecepatan angin mendekati nilai 0, dan sisanya berada pada nilai 5.
-   - Konsumsi daya pada stasiun Quads (Zona 1) sebagian besar berada pada rentang daya 21.000 hingga 40.000, dan paling banyak berada pada daya sekitar 22.500.
-   - Konsumsi daya pada stasiun Smir (Zona 2) sebagian besar berada pada rentang daya 12.500 hingga 27.500, dan paling banyak berada pada daya sekitar 16.500.
-   - Konsumsi daya pada stasiun Boussafou (Zona 3) sebagian besar berada pada rentang daya 9.000 hingga 17.500, dan rentang 24.000 hingga 26.000, serta paling banyak berada pada daya sekitar 14.000.
-   - Data diambil pada tahun 2017.
+   Melaksanakan analisis data *univariate* terhadap variabel-variabel. Proses analisis ini menggunakan bantuan visualisasi histogram.
+
+   ***Categorical Features***
+
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/84d8a4b8-c365-4feb-9598-979cc94ee71b)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/a7a63af6-fecc-4e4a-b1f7-b853d5d90bb3)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/f272404d-863c-4cb8-bed9-a141760d26c5)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/e6686511-f998-4a46-b755-16ef62715ea8)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/e17e4ea9-d744-45bb-9a15-91e14bf13d4a)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/7b67f47b-21ec-453e-b859-a6faad0edff8)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/d96fdbb9-5bb7-4a3f-b67e-7f8d6bab49f4)
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/0c1234dd-e0fd-4448-9f43-f093bfc028d4)
+
+   Dari data beberapa histogram di atas diperoleh informasi, yaitu:
+   - Mayoritas mobil yang ada di pasar bertipe sedan.
+   - Lebih dari **50%** mobil memiliki interior terbuat dari kulit.
+   - Mayoritas mobil berbahan bakar petrol.
+   - Mobil matic lebih sering dijumpai di pasar.
+   - Mobil dengan penggerak di depan lebih banyak.
+   - Mobil dengan 4 pintu lebih banyak dibandingkan 2 pintu dan >5 pintu.
+   - Lebih banyak mobil dengan posisi stir di kiri.
+   - Warna putih, silver, dan hitam mendominasi warna mobil di pasar.
+
+   ***Numerical Features***
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/56df933d-c99d-4e23-9767-9f8fa21b6268)
+
+   Informasi yang dapat diketahui dari histogram di atas
+   *   Harga pasaran mobil berada di **<$1000**
+   *   Volume mesin kendaraan mobil umumnya 2 liter
+   *   Kendaraan bekas pakai mendominasi pasar mobil
+   *   Hampir semua mobil memiliki 4 silinder
+   *   Mayoritas jumlah *airbags* dalam mobil adalah 4
    
 6. **Multivariate Analysis**  
-   Melakukan visualisasi distribusi data pada fitur-fitur numerik dari *dataframe* `epower`. Visualisasi dilakukan dengan bantuan *library* `seaborn` `pairplot` menggunakan parameter `diag_kind`, yaitu `kde`, untuk melihat perkiraan distribusi probabilitas antar fitur numerik.
+   Melaksanakan analisis data *multivariate* terhadap variabel-variabel.
+
+   ***Categorical Features***
    
-   <img src="https://user-images.githubusercontent.com/64983961/188507899-65cd3a60-d19c-47d6-8d7d-c7b1a57364ea.png" alt="Multivariate Analysis" title="Multivariate Analysis">
+   Mengecek harga kendaraan terhadap masing-masing fitur
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/ed7edb20-444e-4c6f-9689-9b5c3d4f6f66)
    
+   Informasi yang bisa didapatkan dari histogram di atas
+   *   Mobil bertipe Jeep dan Universal memiliki harga yang tertinggi dibandingkan dengan mobil lainnya
+   *   Mobil dengan interior kulit memiliki harga yang lebih mahal
+   *   Mobil dengan bahan bakar Diesel dan *Plug-in Hybrid* memiliki harga tertinggi dan sangat jauh gap harganya dengan mobil berbahan bakar CNG
+   *   Harga mobil yang *Gear box*-nya bertipe Tiptronic paling tinggi
+   *   Tidak ada perbedaan harga mobil berdasarkan roda penggeraknya
+   *   Mobil dengan pintu 2 memiliki harga yang jauh dangan pintu 4 dan pintu >5
+   *   Mobil stri kiri memiliki harga yang lebih mahal dibandingkan mobil stir kanan
+   *   Harga mobil berdasarkan warna memiliki banyak variasi. Mobil dengan warna *pink, purple*, dan *green* memiliki harga di bawah rata-rata
+
+   ***Numerical Features***
+   
+   Menggambarkan distribusi data untuk variabel numerik dalam *dataframe* `epower` menggunakan visualisasi. Ini dilakukan dengan memanfaatkan fungsi `pairplot` dari *library*    `seaborn`, dengan menetapkan `diag_kind` ke `kde` untuk mengestimasi dan memvisualisasikan distribusi probabilitas dari setiap variabel numerik.
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/c35adee6-7572-4e95-b35e-1ec4c260ae94)
+
 7. **Correlation Matrix with Heatmap**  
-   Melakukan pengecekan korelasi antar fitur numerik dengan menggunakan visualisasi diagram *heatmap* *correlation matrix*.
+   Mengkaji hubungan antara variabel numerik dengan memvisualisasikan matriks korelasi melalui diagram *heatmap*.
    
-   <img src="https://user-images.githubusercontent.com/64983961/188507977-c0120633-e8c2-44f6-9bc6-1b59347ebf86.png" alt="Correlation Matrix with Heatmap" title="Correlation Matrix with Heatmap">
-   
-   Dapat dilihat pada diagram *heatmap* di atas memiliki *range* atau rentang angka dari 1.0 hingga 0.4 dengan keterangan sebagai berikut,
-   - Jika semakin mendekati 1, maka korelasi antar fitur numerik semakin kuat bernilai positif.
-   - Jika semakin mendekati 0, maka korelasi antar fitur numerik semakin rendah.
-   - Jika semakin mendekati -1, maka korelasi antar fitur numerik semakin kuat bernilai negatif.
-   
-   Jika korelasi bernilai positif, berarti nilai kedua fitur numerik cenderung meningkat bersama-sama.  
-   
-   Jika korelasi bernilai negatif, berarti nilai salah satu fitur numerik cenderung meningkat ketika nilai fitur numerik yang lain menurun.
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/d05feabc-aa06-42d1-822d-14bedaa52066)
+
+   Diagram *heatmap* yang ditampilkan memiliki angka dari -0.25 hingga 1, yang mengindikasikan tingkat korelasi antara variabel numerik dengan cara berikut:
+- Nilai yang mendekati 1 menandakan adanya korelasi positif yang kuat antara dua variabel, di mana keduanya cenderung meningkat secara bersamaan.
+- Nilai yang mendekati 0 menunjukkan bahwa tidak ada korelasi yang signifikan antara dua variabel.
+- Nilai yang mendekati -1 menunjukkan korelasi negatif yang kuat, di mana satu variabel cenderung meningkat sementara yang lainnya menurun.  
 
 8. **Analisis Korelasi Antar Fitur**  
-   - Fitur `PowerConsumption_Zone1` memiliki korelasi yang cukup kuat dengan fitur `Temperature`, `Humidity`, dan `Hour`.
-   - Fitur `PowerConsumption_Zone2` memiliki korelasi yang cukup kuat dengan fitur `Temperature`, `Humidity`, `Month`, dan `Hour`.
-   - Fitur `PowerConsumption_Zone3` memiliki korelasi yang cukup kuat dengan fitur `Temperature`, `Humidity`, `Month`, dan `Hour`.
-   
-   Sehingga, fitur `WindSpeed`, `Year`, `Day`, dan `Minute` memiliki korelasi yang paling rendah dengan fitur `PowerConsumption_Zone1`, `PowerConsumption_Zone2`, dan `PowerConsumption_Zone3`. Dengan begitu, dapat dilakukan *drop* (menghapus) fitur-fitur tersebut.
-   
-   <img src="https://user-images.githubusercontent.com/64983961/188507983-6b44443c-d576-4ab3-8dcf-f7b9cf22ad99.png" alt="Analisis Korelasi Antar Fitur" title="Analisis Korelasi Antar Fitur">
+   Fitur `Price` memiliki korelasi yang cukup kuat dengan `Engine Volume`.
 
-## Data Preparation
+   Sehingga, fitur `Mileage`, `Cylinders`, dan `Airbags`yang memiliki korelasi rendah dapat dilakukan *drop* (menghapus) untuk menghilangkan fitur-fitur tersebut.
 
-Pada tahap persiapan data atau *data preparation* dilakukan berdasarkan penjelasan yang sudah dipaparkan pada bagian [Solution Statements](#solution-statements "Solution Statements"). Tahap ini penting dilakukan untuk mempersiapkan data sehingga dapat digunakan untuk melatih model *machine learning* dengan baik. Berikut adalah dua tahapan data preparation yang dilakukan, yaitu,
+   ```python
+   car.drop(['Mileage'],   inplace=True, axis=1)
+   car.drop(['Cylinders'], inplace=True, axis=1)
+   car.drop(['Airbags'],   inplace=True, axis=1)
+   ```
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/7ea1d0f8-71fd-4263-ab41-a3efa55cc924)
 
-1. **Split Data**  
-   Pembagian data dilakukan untuk memisahkan data keseluruhan menjadi dua (2) bagian, yaitu data latih (*training data*) dan data uji (*testing data*) dengan perbandingan rasio sebesar 90 : 10 menggunakan `train_test_split`.
-   
+# Data Preparation
+
+Tahap persiapan data, yang sudah dijelaskan dalam bagian [Solution Statements](#solution-statements "Solution Statements"), merupakan langkah krusial untuk memastikan data siap digunakan dalam pelatihan model *machine learning*. Ada tiga langkah utama dalam persiapan data, yaitu:
+
+1. **Encoding Fitur Kategori**
+
+   Dalam proses pengkodean untuk variabel kategori, teknik yang sering digunakan adalah [*`one-hot-encoding`*](https://scikit-learn.org/stable/modules/generated/sklearn.preprocessing.OneHotEncoder.html). Fungsi ini tersedia dalam library [*`scikit-learn`*](https://scikit-learn.org/), yang memungkinkan transformasi variabel kategori menjadi fitur-fitur baru yang dapat merepresentasikan informasi kategorikal dengan tepat.
+
     ```python
-    xTrain, xTest, yTrain, yTest = train_test_split(x, y, test_size=0.1, random_state=123)
+    #One-hot-encoding
+   car = pd.concat([car, pd.get_dummies(car['Category'], prefix='Category')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Leather interior'], prefix='Leather interior')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Fuel type'], prefix='Fuel type')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Gear box type'], prefix='Gear box type')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Drive wheels'], prefix='Drive wheels')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Doors'], prefix='Doors')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Wheel'], prefix='Wheel')],axis=1)
+   car = pd.concat([car, pd.get_dummies(car['Color'], prefix='Color')],axis=1)
+   car.drop(['Category','Leather interior','Fuel type', 'Gear box type', 'Drive wheels', 'Doors', 'Wheel', 'Color'], axis=1, inplace=True)
     ```
     
-   Kemudian diperoleh hasil pembagian data masing-masing, yaitu sebagai berikut,
+2. **Split Data**  
+   Proses pembagian data bertujuan untuk membagi kumpulan data menjadi dua segmen: segmen untuk pelatihan, yang disebut *data train*, dan segmen untuk pengujian, yang disebut *data test*. Pembagian ini menggunakan metode `train_test_split` dengan proporsi 90% data untuk pelatihan dan 10% sisanya untuk pengujian.
    
     ```python
-    Total seluruh sampel : 50931
-    Total data train     : 45837
-    Total data test      : 5094
+       X = car.drop(["Price"],axis =1)
+       y = car["Price"]
+       X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.1, random_state = 123)
     ```
+    ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/c4761482-8a78-4cdf-ba17-3ad826fc091d)
 
-2. **Standarisasi pada Fitur Numerik**  
-   Standarisasi fitur numerik menggunakan `StandardScaler` untuk mencegah terjadinya penyimpangan nilai data yang cukup besar. Proses standarisasi tersebut dilakukan dengan mengurangkan nilai rata-rata, lalu membaginya dengan standar deviasi atau simpangan baku untuk menggeser distribusi. Proses standarisasi akan menghasilkan distribusi dengan nilai rata-rata menjadi 0, dan nilai standar deviasi menjadi 1.
+3. **Standarisasi pada Fitur Numerik**  
+   Melakukan standarisasi nilai pada fitur numerik dengan menggunakan `StandardScaler` dari *library* `scikit-learn`. Proses standarisasi ini bertujuan untuk mencegah terjadinya penyimpangan nilai data yang cukup besar.
    
     ```python
-    scaler = StandardScaler()
-    scaler.fit(xTrain[numericalFeatures])
-    xTrain[numericalFeatures]  = scaler.transform(xTrain.loc[:, numericalFeatures])
+      numericalFeatures = ['Engine volume']
+      scaler = StandardScaler()
+      scaler.fit(X_train[numericalFeatures])
+      X_train[numericalFeatures] = scaler.transform(X_train.loc[:, numericalFeatures])
+      X_train[numericalFeatures].head()
     ```
    
-   <img src="https://user-images.githubusercontent.com/64983961/188508047-08b6a450-aa39-4b2f-8b40-ef86e5adc216.png" alt="Standarisasi pada Fitur Numerik" title="Standarisasi pada Fitur Numerik">
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/6aa0f8d7-d0ac-4c6f-abbe-4820161a7caa)
 
+4. **Reduksi Dimensi**  
+   Reduksi dimensi adalah metode yang digunakan untuk mengurangi jumlah variabel dalam data sambil memastikan informasi penting tetap terjaga. Salah satu metode reduksi dimensi yang sering digunakan adalah *Principal Component Analysis*, atau PCA. Teknik ini mengurangi dimensi data dengan mengubahnya dari ruang berdimensi n menjadi ruang berdimensi m yang lebih rendah, di mana m lebih kecil dari n, tanpa kehilangan esensi data tersebut.
+
+   ```python
+       sns.pairplot(car[['Price','Engine volume']], plot_kws={"s": 3});
+   ```
+
+   ![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/5075307b-324c-458b-a755-d9308a778a31)
+
+   Aplikasikan [*`class PCA`*](https://scikit--learn-org.translate.goog/stable/modules/generated/sklearn.decomposition.PCA.html?_x_tr_sl=en&_x_tr_tl=id&_x_tr_hl=id&_x_tr_pto=tc) dari library *`scikit learn`*
+ 
     ```python
-    xTrain[numericalFeatures].describe().round(4)
+         pca = PCA(n_components=2, random_state=123)
+         pca.fit(car[['Price','Engine volume']])
+         princ_comp = pca.transform(car[['Price','Engine volume']])
     ```
-   
-   <img src="https://user-images.githubusercontent.com/64983961/188508061-75a22910-be6c-485a-a2da-e5364d75e311.png" alt="Deskripsi Statistik setelah Standarisasi" title="Deskripsi Statistik setelah Standarisasi">
-
-## Modelling
+    
+# Modelling
 
 Setelah dilakukannya tahap *data preparation*, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan.
 
-Tahap persiapan *dataframe* untuk analisis model menggunakan parameter `index`, yaitu train_mse dan test_mse, serta parameter `columns` yang merupakan algoritma yang akan digunakan untuk melakukan prediksi, yaitu algoritma K-Nearest Neighbor (KNN), Random Forest, dan Adaptive Boosting (AdaBoost).
+Yang pertama dilakukan adalah menyiapkan *dataframe* untuk analisis model menggunakan `index` yang terdiri dari `train_mse` dan `test_mse`, serta `columns` yang mencakup algoritma prediksi seperti [`K-Nearest Neighbor (KNN)`](https://www.geeksforgeeks.org/k-nearest-neighbours/), [`Random Forest`](https://www.ibm.com/topics/random-forest#:~:text=Random%20forest%20is%20a%20commonly,Decision%20trees), dan [`Adaptive Boosting (AdaBoost)`](https://www.analyticsvidhya.com/blog/2021/09/adaboost-algorithm-a-complete-guide-for-beginners/#:~:text=AdaBoost%20algorithm%2C%20short%20for%20Adaptive,assigned%20to%20incorrectly%20classified%20instances.).
 
 ```python
 models = pd.DataFrame(
@@ -260,81 +338,76 @@ models = pd.DataFrame(
 )
 ```
 
-Kemudian terapkan ketiga algoritma ke dalam model tersebut.
+Langkah selanjutnya adalah menerapkan ketiga algoritma ke dalam *dataframe*
 
 1. **K-Nearest Neighbor (KNN) Algorithm**  
-   Pada algoritma K-Nearest Neighbor digunakan parameter `n_neighbors` dengan nilai k = 10 tetangga dan `metric` bawaan, yaitu Euclidean.
-   
    ```python
    knn = KNeighborsRegressor(n_neighbors=10)
+   knn.fit(X_train, y_train)
+   models.loc['train_mse','knn'] = mean_squared_error(y_pred = knn.predict(X_train), y_true=y_train)
    ```
-   
-   Kemudian akan dilakukan analisis prediksi *error* menggunakan *Mean Squared Error* (MSE) pada data latih (*training data*) dan data uji (*testing data*)
    
 2. **Random Forest Algorithm**  
-   Pada algoritma K-Nearest Neighbor digunakan parameter `n_estimator` dengan jumlah 50 *trees* (pohon), `max_depth` dengan nilai kedalaman atau panjang pohon 16, `random_state` dengan nilai 55, dan `n_jobs` yang bernilai -1 (pekerjaan dilakukan secara paralel).
-   
    ```python
-   rf = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
+   RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
+   RF.fit(X_train, y_train)
+   models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=RF.predict(X_train), y_true=y_train)
    ```
-   
-   Kemudian akan dilakukan analisis prediksi *error* menggunakan *Mean Squared Error* (MSE) pada data latih (*training data*) dan data uji (*testing data*)
    
 3. **Adaptive Boosting (AdaBoost) Algorithm**  
-   Pada algoritma K-Nearest Neighbor digunakan parameter `learning_rate` dengan nilai bobot setiap *regressor* adalah 0.05, dan `random_state` dengan nilai 55.
-   
    ```python
    boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)
+   boosting.fit(X_train, y_train)
+   models.loc['train_mse','Boosting'] = mean_squared_error(y_pred=boosting.predict(X_train), y_true=y_train)
    ```
-   
-   Kemudian akan dilakukan analisis prediksi *error* menggunakan *Mean Squared Error* (MSE) pada data latih (*training data*) dan data uji (*testing data*)
 
-Ketiga model yang telah dibangun di atas, akan dilakukan pengujian kinerja untuk masing-masing model yang menggunakan algoritma K-Nearest Neighbor, algoritma Random Forest, dan algoritma Adaptive Boosting. Dari ketiga model tersebut akan diperoleh satu (1) model dengan hasil prediksi yang paling baik dan tingkat *error* yang paling rendah.
+Ketiga model yang telah dirancang —berdasarkan algoritma K-Nearest Neighbor, Random Forest, dan Adaptive Boosting— akan diuji untuk menentukan mana yang memiliki presisi prediksi paling akurat dan tingkat *error* paling minimal.
 
-## Evaluation
+# Evaluation
 
-Pada tahap evaluasi model, akan dilakukan pengujian untuk melihat algoritma mana yang memberikan hasil prediksi paling baik dan dengan tingkat *error* yang paling rendah. Sebelumnya, akan dilakukan proses standarisasi atau *scaling* pada fitur numerik data uji (*testing data*) agar nilai rata-rata (*mean*) bernilai 0, dan varians bernilai 1.
+Evaluasi model regresi pada dasarnya cukup mudah dipahami. Pada intinya, sebagian besar metrik evaluasi memiliki prinsip yang serupa. Performa model dianggap baik jika prediksi yang dihasilkan dekat dengan nilai aktual. Sebaliknya, dianggap kurang baik jika jauh dari nilai aktual. Perbedaan antara nilai yang diprediksi dan nilai aktual dikenal sebagai kesalahan prediksi. Oleh karena itu, tujuan utama dari semua metrik adalah untuk mengukur dan meminimalkan kesalahan prediksi tersebut.
 
 ```python
-xTest.loc[:, numericalFeatures] = scaler.transform(xTest[numericalFeatures])
+# Terapkan normalisasi pada data numerik dalam X_test agar nilai rata-ratanya menjadi nol dan variansnya satu
+X_test.loc[:, numericalFeatures] = scaler.transform(X_test[numericalFeatures])
 ```
 
-Kemudian evaluasi dari ketiga model, yaitu algoritma K-Nearest Neighbor, Random Forest, dan Adaptive Boosting (AdaBoost) untuk masing-masing data latih (*training data*) dan data uji (*testing data*) dengan melihat tingkat *error*-nya menggunakan *Mean Squared Error* (MSE),
+Evaluasi performa tiga model pembelajaran mesin: *K-Nearest Neighbor, Random Forest*, dan *AdaBoost*, pada set data pelatihan dan pengujian dengan mengukur tingkat kesalahan ketiga algoritma tersebut melalui *Mean Squared Error* (MSE).
 
 $$MSE=\frac{1}{N}\sum_{i=1}^{N} (y_i-y\\_pred_i)^2$$
 
 di mana, nilai $N$ adalah jumlah *dataset*, nilai $y_i$ merupakan nilai sebenarnya, dan $y\\_pred$ yaitu nilai prediksinya.
 
-Penggunaan metode metrik *Mean Squared Error* (MSE) memiliki kelebihan, yaitu cukup sederhana dan mudah dipahami dalam melakukan perhitungan. Meskipun begitu, terdapat kelemahan pada metrik ini, yaitu hasil akurasi prediksi yang kecil karena tidak dapat membandingan hasil peramalan tersebut dengan kenyataannya. []
+Metode metrik *Mean Squared Error* (MSE) menawarkan keuntungan karena proses perhitungannya yang mudah dan konsepnya yang tidak rumit. Namun, metrik ini memiliki kekurangan, seperti tidak mampu memberikan perbandingan langsung antara hasil prediksi dan situasi nyata, yang dapat mengakibatkan akurasi prediksi yang tidak optimal.
 
 ```python
-mse = pd.DataFrame(columns=['train', 'test'], index=['KNN', 'RF', 'Boosting'])
-modelDict = {'KNN': knn, 'RF': rf, 'Boosting': boosting}
-for name, model in modelDict.items():
-    mse.loc[name, 'train'] = mean_squared_error(y_true=yTrain, y_pred=model.predict(xTrain))/1e3
-    mse.loc[name, 'test']  = mean_squared_error(y_true=yTest,  y_pred=model.predict(xTest))/1e3
+mse = pd.DataFrame(columns=['train', 'test'], index=['KNN','RF','Boosting'])
+model_dict = {'KNN': knn, 'RF': RF, 'Boosting': boosting}
+for name, model in model_dict.items():
+    mse.loc[name, 'train'] = mean_squared_error(y_true=y_train, y_pred=model.predict(X_train))/1e3
+    mse.loc[name, 'test'] = mean_squared_error(y_true=y_test, y_pred=model.predict(X_test))/1e3
 ```
 
-<img src="https://user-images.githubusercontent.com/64983961/188511052-986610cd-7ef4-4f79-a7c1-eef777d3a4f8.png" alt="Evaluation" title="Evaluation">
+![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/55a480ec-22a7-4981-bf16-14476edbe6fb)
 
 Dari data tabel tersebut dapat divisualisasikan pada grafik batang berikut.
 
-<img src="https://user-images.githubusercontent.com/64983961/188511209-7f53ee96-f76b-4252-b87c-5e27b0fed0fb.png" alt="Evaluation Graph" title="Evaluation Graph">
+![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/badefcd8-dba2-4baf-b9a5-4cdc64af7dbc)
 
-Dari visualisasi diagram di atas dapat disimpulkan bahwa,
-1. Model dengan algoritma Random Forest memberikan nilai *error* yang paling kecil, yaitu sebesar 583.1 pada *training error*, dan 1542.6 pada *testing error*.
-2. Model dengan algoritma K-Nearest Neighbor memiliki tingkat *error* yang sedang di antara dua algoritma lainnya.
-3. Model dengan algoritma Adaptive Boosting mengalami *error* yang paling beser dengan nilai *training error* sebesar 7602.37, dan nilai *testing error* sebesar 7436.21.
+Berdasarkan diagram yang ditampilkan, dapat diketahui:
+1.   Algoritma *Random Forest* menghasilkan nilai *error* terendah.
+2.   Algoritma *K-Nearest Neighbor* menunjukkan tingkat *error* yang berada di tengah-tengah dibandingkan dengan dua algoritma lain.
+3.   Algoritma *Adaptive Boosting* memiliki tingkat *error* tertinggi.
 
-Selanjutnya adalah pengujian prediksi model dengan menggunakan beberapa nilai konsumsi daya (*power consumption*) dari data uji (*testing data*)
+Tahap selanjutnya adalah melakukan pengujian prediksi dengan menggunakan harga (*price*) dari data uji (*testing*)
 
-<img src="https://user-images.githubusercontent.com/64983961/188511397-7664a384-d933-4962-9569-f42cdbdbcf69.png" alt="Testing Model" title="Testing Model">
+![image](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/10cf7573-5889-4cc9-be1b-c22dbbda09ae)
 
-Dapat dilihat prediksi pada model dengan algoritma Random Forest memberikan hasi yang paling mendekati dengan nilai `y_true` jika dibandingkan dengan algoritma model yang lainnya.
+Dapat dilihat prediksi pada model dengan algoritma *K-Nearest Neighbor* memberikan hasi yang paling mendekati dengan nilai `y_true` jika dibandingkan dengan algoritma model yang lainnya.
 
-Nilai `y_true` sebesar **28507** dan nilai prediksi `Random Forest` sebesar **28308**.
+Nilai `y_true` sebesar **26594.0** dan nilai prediksi `*K-Nearest Neighbor*` sebesar **24513.1**.
 
-Kesimpulannya adalah model yang digunakan untuk melakukan prediksi penggunaan daya listrik (*electric power consumption*) menghasilkan **tingkat *error* yang paling rendah** dengan menggunakan **algoritma Random Forest** pada model yang telah dibangun.
+Meskipun diagram `MSE` menunjukan *Random Forest* memiliki error paling kecil dibanding algoritma lainnya, ketika dilakukan pengujian justru *K-Nearest Neighbor* menghasilkan prediksi yang lebih mendekati `y_true`.
 
 ---
 
@@ -352,8 +425,8 @@ Kesimpulannya adalah model yang digunakan untuk melakukan prediksi penggunaan da
 
 [6] *What is Random Forest?*. IBM. https://www.ibm.com/topics/random-forest#:~:text=Random%20forest%20is%20a%20commonly,Decision%20trees 
 
-[7] "AdaBoost", Retrieved from: https://en.wikipedia.org/wiki/AdaBoost#Training
+[7] Wikimedia Foundation. (2024, March 6). *Random Forest*. Wikipedia. https://en.wikipedia.org/wiki/Random_forest 
 
-[8] S. R. P. Nur Hidayatika, and S. N. W.P, "USULAN PENGGUNAAN METODE FORECASTING UNTUK PERMINTAAN KOPI ROBUSTA PADA PT. XYZ," *Industrial Engineering Online Journal*, vol. 4, no. 3, 2016, Retrieved from: https://ejournal3.undip.ac.id/index.php/ieoj/article/view/9002
+[8] *AdaBoost algorithm in Machine Learning*. AlmaBetter. https://www.almabetter.com/bytes/tutorials/data-science/adaboost-algorithm 
 
-[9] A. Salam and A. E. Hibaoui, "Comparison of Machine Learning Algorithms for the Power Consumption Prediction : - Case Study of Tetouan city –," *2018 6th International Renewable and Sustainable Energy Conference (IRSEC)*, 2018, pp. 1-5, doi: 10.1109/IRSEC.2018.8703007.
+[9] Wikimedia Foundation. (2024, March 6). *Adaboost*. Wikipedia. https://en.wikipedia.org/wiki/AdaBoost 
