@@ -1,48 +1,51 @@
-# Laporan Proyek Machine Learning - Andrew Benedictus Jamesie
+# Laporan Proyek Machine Learning - Sandy Susanto
 
 ## Domain Proyek
 
-Domain proyek ini akan membahas mengenai permasalahan dalam bidang lingkungan dan energi yang dibuat untuk mengetahui prediksi penggunaan daya listrik (*electric power consumption*) berdasarkan data cuaca yang telah dikumpulkan di kota Tétouan, Maroko.
+Domain proyek ini akan membahas mengenai permasalahan dalam bidang ekonomi dan bisnis. Fokus pada proyek ini adalah untuk membuat prediksi harga mobil bekas pakai berdasarkan fitur-fitur dan dimiliki oleh kendaraan tersebut.
 
-<img src="https://user-images.githubusercontent.com/64983961/188515112-debf11cd-90f1-434a-a6f1-fc448e2304c8.png" alt="Energy Power Illustration" title="Energy Power Illustration" width="100%">
+<img src="https://image.cnbcfm.com/api/v1/image/106961034-16342989482021-10-15t115305z_757712464_rc2baq9ww2kh_rtrmadp_0_usa-economy.jpeg?v=1671462564" alt="Car Market" title="Car Market Illustration" width="100%">
 
-Tétouan adalah sebuah kota yang terletak di bagian utara Maroko dengan luas wilayah sekitar $10.375km^2$ dan jumlah penduduk sekitar 380.787 jiwa, menurut data sensus terakhir tahun 2014, dan mengalami peningkatan sebesar 1,96% setiap tahun. [[1]](https://en.wikipedia.org/wiki/T%C3%A9touan 'Tétouan') Tétouan terletak di sepanjang Laut Mediterania, sehingga memiliki kondisi cuaca yang sejuk dan musim dingin, panas, dan kering selama musim panas.
+Pembelian kendaraan baru merupakan salah investasi finansial yang signifikan bagi sebagian besar institusi maupun individu. Dalam konteks ini, nilai jual kembali kendaraan, yang mencerminkan sebagian dari *return of investment*, menjadi faktor penting dalam proses pengambilan keputusan pembelian. Oleh karena itu, baik konsumen individu maupun perusahaan memiliki kepentingan dalam mengidentifikasi atribut-atribut kendaraan yang dapat mempertahankan nilai jualnya di pasar primer ataupun sekunder [[1]](https://link.springer.com/article/10.1057/jors.2016.16).
 
-Konsumsi energi per kapita Maroko sebesar 0,56 toe (*tonne of oil equivalent*), sekitar 42% di bawah rata-rata Afrika Utara, termasuk juga listrik sekitar 900 kWh (38% di bawah rata-rata regional) pada tahun 2020. Perkembangan konsumsi energi total melambat antara 2010 dan 2019 (+3% per tahun, dibandingkan 4,5% per tahun selama 2000-2010), dan turun sebesar 7% pada tahun 2020 menjadi sekitar 21 Mtoe (*Million tonnes of oil equivalent*). [[2]](https://www.enerdata.net/estore/energy-market/morocco 'Morocco Energy Information')
+Menurut data yang dianalisis, ada beberapa hal penting yang sangat mempengaruhi berapa harga mobil bekas nantinya, seperti siapa produsen yang membuat mobilnya, tipe mobil, seberapa jauh mobil itu sudah berjalan, berapa umurnya, riwayat servisnya, bagaimana kondisi mobil secara fisik, seberapa banyak mobil itu terjual di pasaran, bagaimana layanan setelah mobil itu dibeli, dan bagaimana cara pemilik sebelumnya mengendarainya [[2]](https://www.semanticscholar.org/paper/New-Model-for-Residual-Value-Prediction-of-the-Used-Shen-Wang/af9ec65507e1f156d6c1817f92caa9547e5ba61a).
 
-Produksi nasional hidrokarbon cukup rendah dan semua produk minyak diimpor sejak dilakukannya penutupan kilang minyak tunggal negara itu pada tahun 2015 (200.000 bbl/d). Impor produk minyak meningkat pesat dari tahun 2015 hingga tahun 2019 (+6% per tahun) dan turun sebesar 12% di tahun 2020 karena krisis COVID-19. [[2]](https://www.enerdata.net/estore/energy-market/morocco 'Morocco Energy Information') Data konsumsi daya dikumpulkan oleh Supervisory Control and Data Acquisition System (SCADA) Amendis yang merupakan penyelenggaraan layanan publik dan bertanggung jawab atas distribusi air minum dan listrik sejak tahun 2002. Energi yang disalurkan berasal dari National Office of Electricity and Drinking Water (Dinas Listrik dan Air Minum Nasional). Setelah tegangan tinggi (63 kV) diubah menjadi tegangan menengah (20 kV), diperbolehkan untuk mendistribusikan energi.
+Reputasi yang baik dari penjual dapat sedikit meningkatkan harga yang ditawarkan dalam lelang *online* untuk mobil bekas, terutama jika sudah ada tawaran yang masuk dan peluang untuk terjual. Namun, pengaruhnya tidak sebesar faktor lain seperti kejelasan status kepemilikan atau waktu penutupan lelang. Menariknya, meskipun mobil dipajang dengan menarik dan banyak foto, hal tersebut tidak terlalu berpengaruh terhadap harga akhir atau kesempatan mobil tersebut untuk terjual. Ini cukup mengejutkan karena biasanya presentasi yang baik dianggap penting dalam penjualan *online*, terutama untuk barang yang beragam dan bernilai tinggi seperti mobil [[3]](https://link.springer.com/article/10.1007/s11293-006-9045-7).
 
-Dengan konsumsi listrik tersebut, berdasarkan data dan latar belakang di atas, maka di dalam proyek ini akan dibuat sebuah model *machine learning* untuk melakukan analisis prediksi terhadap penggunaan energi atau daya listrik. Dengan adanya model *machine learning* yang telah dibangun, diharapkan dapat membantu dalam memperkirakan besarnya daya listrik yang dikonsumsi berdasarkan atribut data konsumsi energi listrik di kota Tétouan, Maroko.
+Semua hal ini saling berkaitan dan bersama-sama menentukan harga jual kembali mobil. Jika kita tidak memperhatikan bagaimana semua hal ini saling berhubungan dan hanya menghitung pengaruhnya satu per satu, maka prediksi kita tentang harga mobil bekas tidak akan akurat.
+
+Proyek ini akan melibatkan beberapa tahap, mulai dari pengumpulan dan pembersihan data, eksplorasi data untuk memahami fitur-fitur yang paling berpengaruh terhadap harga, pembangunan model prediksi, hingga evaluasi dan penyempurnaan model. Dengan pendekatan yang sistematis dan pemanfaatan teknologi terkini, proyek prediksi harga mobil ini berpotensi memberikan kontribusi terhadap efisiensi dan transparansi pasar mobil bekas.
 
 # Business Understanding
 
 ## Problem Statements
 
-Berdasarkan latar belakang yang telah dijelaskan di atas, maka diperoleh rumusan masalah yang akan diselesaikan pada proyek ini, yaitu:
-1. Bagaimana cara melakukan tahap persiapan data sebelum digunakan untuk membuat model *machine learning*?
-2. Bagaimana cara membuat model *machine learning* untuk melakukan prediksi konsumsi daya listrik?
+Dari konteks yang telah disampaikan sebelumnya, teridentifikasi dua pertanyaan utama yang akan dijawab melalui proyek ini:
+1. Apa langkah-langkah yang diperlukan dalam mempersiapkan data sebelum diaplikasikan dalam pengembangan model *machine learning*?
+2. Bagaimana proses pembuatan model *machine learning* yang dapat memprediksi harga jual mobil bekas?
 
 ## Goals
 
-Berdasarkan rumusan masalah yang telah dipaparkan di atas, maka didapatkan tujuan dari proyek ini, yaitu:
-1. Melakukan tahap persiapan data (*data preparation*) sehingga data dapat digunakan pada model *machine learning* dengan baik.
-2. Membuat model *machine learning* untuk melakukan analisis prediksi konsumsi daya listrik dengan tingkat *error* yang cukup rendah.
+Dari permasalahan yang telah diuraikan, tujuan yang ingin dicapai melalui proyek ini adalah sebagai berikut:
+1. Menjalankan proses persiapan data secara menyeluruh untuk memastikan data siap digunakan dalam model *machine learning*.
+2. Mengembangkan model *machine learning* yang efektif untuk menganalisis dan memprediksi harga jual mobil bekas dengan tingkat *error* yang minimal.
 
 ## Solution Statements
 
-Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan untuk dapat mencapai tujuan dari proyek ini, yaitu:
-1. Tahap persiapan data (*data preparation*) dapat dilakukan dengan beberapa teknik, sebagai berikut:
-   - Melakukan pembagian data menjadi 2, yaitu data latih (*training data*) dan data uji (*testing data*) dengan perbandingan rasio sebesar 90 : 10 yang akan digunakan ketika membangun model *machine learning*.
-   - Melakukan standarisasi nilai pada data fitur numerik untuk mencegah terjadinya penyimpangan nilai data yang cukup besar.
-2. Tahap pembuatan model *machine learning* akan digunakan 3 model dengan algoritma *machine learning* yang berbeda. Algoritma yang akan digunakan adalah K-Nearest Neighbor Algorithm, Random Forest Algorithm, dan Adaptive Boosting Algorithm. Dari ketiga model tersebut akan dilakukan evaluasi performa dan kinerja masing-masing algoritma dan akan dipilih satu algoritma yang memberikan hasil prediksi yang terbaik.
-   - **Algoritma K-Nearest Neighbor**  
-     Sesuai dengan namanya, yaitu "sejumlah k-tetangga terdekat" adalah algoritma *machine learning* yang tergolong ke dalam *supervised learning* yang bekerja dengan cara mengelompokkan data berdasarkan kemiripan antar data baru dengan sejumlah data (k) yang terdekat. [[3]](https://geospasialis.com/k-nearest-neighbor 'Mengenal K-Nearest Neighbor: Algoritma Populer untuk Machine Learning') Cara kerja algoritma K-Nearest Neighbor, sebagai berikut: [[3]](https://geospasialis.com/k-nearest-neighbor 'Mengenal K-Nearest Neighbor: Algoritma Populer untuk Machine Learning')
-     - Tentukan jumlah tetangga terdekat (`k`) yang akan dipertimbangkan sebagai dasar klasifikasi.
-     - Hitung jarak antara data baru terhadap semua titik data dalam *dataset* (tetangga terdekat).
-     - Urutkan jarak pada dari kecil ke besar, lalu diambil titik data dengan jarak terkecil dari sejumlah `k` titik.
-     - Hitung jumlah titik pada `k` setiap kelas atau kategori.
-     - Masukkan data baru ke kelas dengan jumlah `k` terbanyak.
-     
+Dari uraian sebelumnya, beberapa langkah strategis telah diidentifikasi untuk mencapai target proyek, antara lain:
+1. Proses persiapan data akan meliputi teknik-teknik berikut:
+   - Pembagian dataset menjadi dua bagian, yaitu set pelatihan dan set pengujian dengan proporsi 90% untuk pelatihan dan 10% untuk pengujian, yang akan digunakan dalam pengembangan model *machine learning*.
+   - Standardisasi nilai pada fitur numerik untuk menghindari deviasi yang signifikan pada data.
+2. Dalam fase pembuatan model *machine learning*, tiga model yang menggunakan algoritma yang berbeda akan diuji. Algoritma yang akan diaplikasikan meliputi Algoritma K-Nearest Neighbor, Algoritma Random Forest, dan Algoritma Adaptive Boosting. Setelah evaluasi kinerja masing-masing model, algoritma yang memberikan akurasi prediksi terbaik akan dipilih sebagai model utama.
+   - **Algoritma K-Nearest Neighbor (KNN)**  
+Algoritma KNN merupakan metode klasifikasi yang tidak bergantung pada parameter tertentu dan berada di bawah kategori pembelajaran dengan pengawasan. Algoritma ini memanfaatkan jarak antar titik data untuk menentukan klasifikasi atau prediksi kelompok dari sebuah titik data. Algoritma ini termasuk metode yang populer dan mudah digunakan dalam *machine learning* untuk klasifikasi dan regresi. Walaupun algoritma KNN bisa digunakan untuk regresi maupun klasifikasi, umumnya lebih sering digunakan untuk klasifikasi. Algoritma ini beroperasi berdasarkan prinsip bahwa titik-titik data yang mirip biasanya berdekatan [[4]](https://www.ibm.com/topics/knn).
+     Cara kerja algoritma K-Nearest Neighbor adalah sebagai berikut: [[5]](https://geospasialis.com/k-nearest-neighbor/)
+     - Tentukan jumlah ( K ), yaitu tetangga terdekat yang akan digunakan untuk klasifikasi
+     - Hitunglah jarak dari data yang akan diklasifikasikan ke semua titik dalam *dataset.*
+     - Urutkan titik-titik tersebut berdasarkan jarak dari yang terkecil hingga terbesar dan pilih ( K ) titik dengan jarak terkecil.
+     - Identifikasi kelas yang paling sering muncul di antara ( K ) titik tersebut.
+     - Klasifikasikan data baru ke dalam kelas yang paling dominan berdasarkan tetangga terdekatnya.
+       
      <br>
      <img src="https://user-images.githubusercontent.com/64983961/188507827-0f729ab6-61a5-4dbc-9be2-afa424f6c294.png" alt="Ilustrasi Algoritma K-Nearest Neighbor" title="Ilustrasi Algoritma K-Nearest Neighbor">
      
@@ -56,29 +59,29 @@ Berdasarkan penjelasan di atas, terdapat beberapa solusi yang dapat dilakukan un
      - *Minkowski distance*
        $$d(x,y)=\left(\sum_{i=1}^n |x_i-y_i|^p\right)^\frac{1}{p}$$
      
-     Adapun kelebihan dari algoritma K-Nearest Neighbor, yaitu: [[3]](https://geospasialis.com/k-nearest-neighbor 'Mengenal K-Nearest Neighbor: Algoritma Populer untuk Machine Learning')
-     - Sangat sederhana dan mudah untuk dipahami
-     - Sangat mudah dalam penerapannya
-     - Dapat digunakan dalam kasus klasifikasi maupun regresi
-     - Dapat digunakan dalam jumlah kelas yang berbeda-beda
-     - Tidak memerlukan proses trainig dan pembangunan model, karena data baru secara langsung akan dikelaskan
-     - Mudah jika ingin untuk melakukan penambahan data
-     - Parameter yang dibutuhkan hanya sedikit, yaitu jumlah k-tetangga (`n_neighbors`), dan metode perhitungan metrik jaraknya (`metric`) [[4]](https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html 'sklearn.neighbors.KNeighborsRegressor')
-     - Hasil pemodelan tidak linear, sehingga cocok untuk klasifikasi data yang batasannya tidak linear.
+     Kelebihan dari algoritma K-Nearest Neighbor adalah: 
+     - Kesederhanaan dan mudah dipahami
+     - Mudah diterapkan
+     - Berlaku untuk klasifikasi dan regresi
+     - Dapat digunakan pada jumlah kelas yang beragam
+     - Tidak memerlukan proses training
+     - Penambahan data baru yang mudah
+     - Parameter minimal
+     - Hasil pemodelan non-linear, cocok untuk data dengan batasan tidak linear
      
-     Adapun kelemahan dari algoritma K-Nearest Neighbor, yaitu: [[3]](https://geospasialis.com/k-nearest-neighbor 'Mengenal K-Nearest Neighbor: Algoritma Populer untuk Machine Learning')
-     - Perlu untuk menentukan nilai `k` yang tepat
-     - *Computation cost* yang cukup tinggi
-     - Waktu pemrosesan akan berlangsung lama jika *dataset* yang digunakan sangat besar
-     - Kurang bagus untuk diterapkan pada *high dimensional data*
-     - Sangat sensitif pada data yang memiliki banyak *noise* (*noisy data*), data yang hilang (*missing data*), dan data dengan nilai yang ekstrem serta kemunculannya yang jarang (*outliers*).
+     Sedangkan kelemahan dari algoritma K-Nearest Neighbor adalah: 
+     - Penentuan nilai \( K \) yang optimal diperlukan
+     - Biaya komputasi yang besar
+     - Proses yang lambat untuk dataset besar
+     - Performa menurun pada data berdimensi tinggi
+     - Sensitivitas terhadap data *noisy*, data yang hilang, dan *outlier*
      
    - **Algoritma Random Forest**  
-     Metode Random Forest merupakan jenis algoritma *supervised learning* dan termasuk ke dalam metode Decision Tree yang menggunakan kombinasi dari masing-masing model tree dan akan digabungkan menjadi sebuah model dalam membuat hasil prediksi akhir. Algoritma Random Forest menggunakan teknik *bagging* (*bootstrap aggregating*), di mana beberapa model akan dilatih dengan cara *random sampling with replacement*. [[5]](https://machinelearning.mipa.ugm.ac.id/2018/07/28/random-forest 'Random Forest')
+     *Random forest* memperluas metode *bagging* dengan menggabungkan teknik *bagging* dan pemilihan fitur secara acak, menciptakan kumpulan *decision tree* yang independen satu sama lain. Pemilihan fitur acak ini menciptakan subset fitur yang berbeda-beda, yang menjamin bahwa setiap *decision tree* memiliki sedikit kesamaan. Ini membedakan *random forest* dari *decision tree* biasa, yang biasanya mempertimbangkan semua fitur saat membagi data, sementara *random forest* hanya menggunakan sebagian dari fitur-fitur tersebut [[6]](https://www.ibm.com/topics/random-forest#:~:text=Random%20forest%20is%20a%20commonly,Decision%20trees).
      
      <img src="https://user-images.githubusercontent.com/64983961/188504775-b7e4aa9b-f1cd-41ef-8a70-a977db8f3d60.png" alt="Ilustrasi Algoritma Random Forest" title="Ilustrasi Algoritma Random Forest">
      
-     Setelah dilakukan pelatihan, prediksi untuk sampel yang tidak terlihat ($x'$) dapat dibuat dengan menghitung rata-rata prediksi dari semua pohon setiap individu model pada $x'$. [[6]](https://en.wikipedia.org/wiki/Random_forest#Bagging 'Random Forest - Bagging')
+     Setelah dilakukan pelatihan, prediksi untuk sampel yang tidak terlihat ($x'$) dapat dibuat dengan menghitung rata-rata prediksi dari semua pohon setiap individu model pada $x'$ [[7]](https://en.wikipedia.org/wiki/Random_forest#Bagging 'Random Forest - Bagging').
      $$\hat{f}=\frac{1}{B}\sum_{b=1}^{B} f_b(x^{'})$$
      
    - **Algoritma Adaptive Boosting**  
@@ -337,17 +340,17 @@ Kesimpulannya adalah model yang digunakan untuk melakukan prediksi penggunaan da
 
 ## Referensi
 
-[1] "Tétouan", Retrieved from: https://en.wikipedia.org/wiki/T%C3%A9touan
+[1] Kihm, A., Vance, C. (2016). "The determinants of equity transmission between the new and used car markets: a hedonic analysis." *J Oper Res Soc* 67, 1250–1258 . https://doi.org/10.1057/jors.2016.16
 
-[2] Enerdata, "Morocco Energy Information", Retrieved from: https://www.enerdata.net/estore/energy-market/morocco
+[2] Shen Gongqi, Wang Yansong, & Zhu Qiang. (2011). "New Model for Residual Value Prediction of the Used Car Based on BP Neural Network and Nonlinear Curve Fit." *2011 Third International Conference on Measuring Technology and Mechatronics Automation.* doi:10.1109/icmtma.2011.455 
 
-[3] S. Hussein, "Mengenal K-Nearest Neighbor: Algoritma Populer untuk Machine Learning", *GEOSPASIALIS*, 2021, Retrieved from: https://geospasialis.com/k-nearest-neighbor
+[3] Andrews, T., & Benzing, C. (2006). "The Determinants of Price in Internet Auctions of Used Cars." *Atlantic Economic Journal,* 35(1), 43–57. doi:10.1007/s11293-006-9045-7 
 
-[4] scikit-learn, "sklearn.neighbors.KNeighborsRegressor", Retrieved from: https://scikit-learn.org/stable/modules/generated/sklearn.neighbors.KNeighborsRegressor.html
+[4] *What is the K-nearest neighbors algorithm?*. IBM. https://www.ibm.com/topics/knn 
 
-[5] A. Yanuar, "Random Forest", *Universitas Gadjah Mada Menara Ilmu Machine Learning*, 2018, Retrieved from: https://machinelearning.mipa.ugm.ac.id/2018/07/28/random-forest
+[5] Hussein, S. (2022, February 23). *Mengenal K-nearest neighbor: Algoritma Populer untuk machine learning.* GEOSPASIALIS. https://geospasialis.com/k-nearest-neighbor/ 
 
-[6] "Random Forest", Retrieved from: https://en.wikipedia.org/wiki/Random_forest#Bagging
+[6] *What is Random Forest?*. IBM. https://www.ibm.com/topics/random-forest#:~:text=Random%20forest%20is%20a%20commonly,Decision%20trees 
 
 [7] "AdaBoost", Retrieved from: https://en.wikipedia.org/wiki/AdaBoost#Training
 
