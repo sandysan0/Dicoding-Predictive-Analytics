@@ -1,1 +1,1 @@
-# Laporan Proyek Machine Learning - Andrew Benedictus Jamesie
+# Laporan Proyek Machine Learning - Sandy Susanto
