@@ -20,9 +20,9 @@ Proyek ini akan melibatkan beberapa tahap, mulai dari pengumpulan dan pembersiha
 
 ## Problem Statements
 
-Dari konteks yang telah disampaikan sebelumnya, teridentifikasi dua pertanyaan utama yang akan dijawab melalui proyek ini:
-1. Apa langkah-langkah yang diperlukan dalam mempersiapkan data sebelum diaplikasikan dalam pengembangan model *machine learning*?
-2. Bagaimana proses pembuatan model *machine learning* yang dapat memprediksi harga jual mobil bekas?
+Ketidakpastian harga jual kembali mobil bekas menyulitkan pembeli dan penjual dalam menentukan harga yang tepat. Faktor-faktor seperti merek, model, usia, jarak tempuh, riwayat servis, kondisi fisik, dan reputasi penjual mempengaruhi harga, tetapi sering kali sulit untuk mengintegrasikan faktor-faktor ini secara akurat. Dari konteks yang telah disampaikan sebelumnya, teridentifikasi dua pertanyaan utama yang akan dijawab melalui proyek ini:
+1. Bagaimana proses pembuatan model *machine learning* yang dapat memprediksi harga jual mobil bekas?
+2. Apa langkah-langkah yang diperlukan dalam mempersiapkan data sebelum diaplikasikan dalam pengembangan model *machine learning*?
 
 ## Goals
 
@@ -39,62 +39,8 @@ Dari uraian sebelumnya, beberapa langkah strategis telah diidentifikasi untuk me
    - Standardisasi nilai pada fitur numerik untuk menghindari deviasi yang signifikan pada data.
    - Reduksi dimensi untuk mengurangi jumlah variabel dalam data sambil memastikan informasi penting tetap terjaga.
 2. Dalam fase pembuatan model *machine learning*, tiga model yang menggunakan algoritma yang berbeda akan diuji. Algoritma yang akan diaplikasikan meliputi Algoritma K-Nearest Neighbor, Algoritma Random Forest, dan Algoritma Adaptive Boosting. Setelah evaluasi kinerja masing-masing model, algoritma yang memberikan akurasi prediksi terbaik akan dipilih sebagai model utama.
-   - **Algoritma K-Nearest Neighbor (KNN)**  
-Algoritma KNN merupakan metode klasifikasi yang tidak bergantung pada parameter tertentu dan berada di bawah kategori pembelajaran dengan pengawasan. Algoritma ini memanfaatkan jarak antar titik data untuk menentukan klasifikasi atau prediksi kelompok dari sebuah titik data. Algoritma ini termasuk metode yang populer dan mudah digunakan dalam *machine learning* untuk klasifikasi dan regresi. Walaupun algoritma KNN bisa digunakan untuk regresi maupun klasifikasi, umumnya lebih sering digunakan untuk klasifikasi. Algoritma ini beroperasi berdasarkan prinsip bahwa titik-titik data yang mirip biasanya berdekatan [[4]](https://www.ibm.com/topics/knn).
-     Cara kerja algoritma K-Nearest Neighbor adalah sebagai berikut: [[5]](https://geospasialis.com/k-nearest-neighbor/)
-     - Tentukan jumlah ( K ), yaitu tetangga terdekat yang akan digunakan untuk klasifikasi
-     - Hitunglah jarak dari data yang akan diklasifikasikan ke semua titik dalam *dataset.*
-     - Urutkan titik-titik tersebut berdasarkan jarak dari yang terkecil hingga terbesar dan pilih ( K ) titik dengan jarak terkecil.
-     - Identifikasi kelas yang paling sering muncul di antara ( K ) titik tersebut.
-     - Klasifikasikan data baru ke dalam kelas yang paling dominan berdasarkan tetangga terdekatnya.
-       
-     <br>
-     <img src="https://user-images.githubusercontent.com/64983961/188507827-0f729ab6-61a5-4dbc-9be2-afa424f6c294.png" alt="Ilustrasi Algoritma K-Nearest Neighbor" title="Ilustrasi Algoritma K-Nearest Neighbor">
-     
-     Perhitungan jarak ke tetangga terdekat dapat dilakukan dengan menggunakan metrik sebagai berikut:
-     - *Euclidean distance*
-       $$d(x,y)=\sqrt{\sum_{i=1}^n (x_i-y_i)^2}$$
-     - *Manhattan distance*
-       $$d(x,y)=\sum_{i=1}^n |x_i-y_i|$$
-     - *Hamming distance*
-       $$d(x,y)=\frac{1}{n}\sum_{n=1}^{n=n} |x_i-y_i|$$
-     - *Minkowski distance*
-       $$d(x,y)=\left(\sum_{i=1}^n |x_i-y_i|^p\right)^\frac{1}{p}$$
-     
-     Kelebihan dari algoritma K-Nearest Neighbor adalah: 
-     - Kesederhanaan dan mudah dipahami
-     - Mudah diterapkan
-     - Berlaku untuk klasifikasi dan regresi
-     - Dapat digunakan pada jumlah kelas yang beragam
-     - Tidak memerlukan proses training
-     - Penambahan data baru yang mudah
-     - Parameter minimal
-     - Hasil pemodelan non-linear, cocok untuk data dengan batasan tidak linear
-     
-     Sedangkan kelemahan dari algoritma K-Nearest Neighbor adalah: 
-     - Penentuan nilai \( K \) yang optimal diperlukan
-     - Biaya komputasi yang besar
-     - Proses yang lambat untuk dataset besar
-     - Performa menurun pada data berdimensi tinggi
-     - Sensitivitas terhadap data *noisy*, data yang hilang, dan *outlier*
-     
-   - **Algoritma Random Forest**  
-     *Random forest* memperluas metode *bagging* dengan menggabungkan teknik *bagging* dan pemilihan fitur secara acak, menciptakan kumpulan *decision tree* yang independen satu sama lain. Pemilihan fitur acak ini menciptakan subset fitur yang berbeda-beda, yang menjamin bahwa setiap *decision tree* memiliki sedikit kesamaan. Ini membedakan *random forest* dari *decision tree* biasa, yang biasanya mempertimbangkan semua fitur saat membagi data, sementara *random forest* hanya menggunakan sebagian dari fitur-fitur tersebut [[6]](https://www.ibm.com/topics/random-forest#:~:text=Random%20forest%20is%20a%20commonly,Decision%20trees).
-     
-     <img src="https://user-images.githubusercontent.com/64983961/188504775-b7e4aa9b-f1cd-41ef-8a70-a977db8f3d60.png" alt="Ilustrasi Algoritma Random Forest" title="Ilustrasi Algoritma Random Forest">
-     
-     Setelah dilakukan pelatihan, prediksi untuk sampel yang tidak terlihat ($x'$) dapat dibuat dengan menghitung rata-rata prediksi dari semua pohon setiap individu model pada $x'$ [[7]](https://en.wikipedia.org/wiki/Random_forest#Bagging 'Random Forest - Bagging').
-     $$\hat{f}=\frac{1}{B}\sum_{b=1}^{B} f_b(x^{'})$$
-     
-   - **Algoritma Adaptive Boosting**  
-     AdaBoost, yang merupakan kependekan dari *Adaptive Boosting*, merupakan teknik ansambel dalam *machine learning* yang serbaguna, cocok untuk tugas-tugas klasifikasi dan regresi. Sebagai algoritma pembelajaran dengan pengawasan, AdaBoost menggabungkan sejumlah pembelajar dasar, seperti *decision tree*, untuk membentuk model yang lebih kuat. Cara kerja AdaBoost adalah dengan menyesuaikan bobot data latih sesuai dengan keakuratan klasifikasi yang telah dilakukan sebelumnya [[8]](https://www.almabetter.com/bytes/tutorials/data-science/adaboost-algorithm).
-     
-     <img src="https://user-images.githubusercontent.com/64983961/188507801-30224052-cac2-4e99-9c67-2aec18de8e59.png" alt="Ilustrasi Algoritma Adaptive Boosting" title="Ilustrasi Algoritma Adaptive Boosting">
-     
-     Algoritma AdaBoost mengacu kepada metode tertentu untuk melakukan pelatihan *classifier* yang di-*boosted*. Pengklasifikasian tersebut adalah pengklasifikasian dalam bentuk, [[9]](https://en.wikipedia.org/wiki/AdaBoost#Training 'AdaBoost - Training')
-     $$F_T(x)=\sum_{t=q}^{T}f_t(x)$$
-     di mana setiap $F_T$ adalah *learner* yang lemah yang mengambil objek $x$ sebagai input dan mengembalikan nilai yang menunjukkan kelas objek. Demikian juga pada pengklasifikasi $T$ merupakan nilai positif jika sampel berada dalam kelas positif, dan negatif jika sebaliknya.
-
+3. Ketiga model ini akan diuji secara bersamaan dengan menggunakan set data yang sama. Performa mereka akan dievaluasi berdasarkan metrik ***Mean Squared Error (MSE)*** untuk menentukan algoritma yang paling efektif dalam memprediksi harga mobil bekas dengan akurat.
+   
 # Data Understanding
 
 ![Dataset](https://github.com/sandysan0/Dicoding-Predictive-Analytics/assets/144081667/3aca9dff-0179-4bbc-b0bf-afe5570ec676)
@@ -325,7 +271,7 @@ Tahap persiapan data, yang sudah dijelaskan dalam bagian [Solution Statements](#
          princ_comp = pca.transform(car[['Price','Engine volume']])
     ```
     
-# Modelling
+# Model Development
 
 Setelah dilakukannya tahap *data preparation*, selanjutnya adalah melakukan tahap persiapan model terlebih dahulu sebelum mengembangkan model menggunakan algoritma yang telah ditentukan.
 
@@ -347,6 +293,45 @@ Langkah selanjutnya adalah menerapkan ketiga algoritma ke dalam *dataframe*
    models.loc['train_mse','knn'] = mean_squared_error(y_pred = knn.predict(X_train), y_true=y_train)
    ```
    
+   Algoritma KNN merupakan metode klasifikasi yang tidak bergantung pada parameter tertentu dan berada di bawah kategori pembelajaran dengan pengawasan. Algoritma ini       memanfaatkan jarak antar titik data untuk menentukan klasifikasi atau prediksi kelompok dari sebuah titik data. Algoritma ini termasuk metode yang populer dan mudah digunakan dalam *machine learning* untuk klasifikasi dan regresi. Walaupun algoritma KNN bisa digunakan untuk regresi maupun klasifikasi, umumnya lebih sering digunakan untuk klasifikasi. Algoritma ini beroperasi berdasarkan prinsip bahwa titik-titik data yang mirip biasanya berdekatan [[4]](https://www.ibm.com/topics/knn).
+   Cara kerja algoritma K-Nearest Neighbor adalah sebagai berikut: [[5]](https://geospasialis.com/k-nearest-neighbor/)
+     - Tentukan jumlah ( K ), yaitu tetangga terdekat yang akan digunakan untuk klasifikasi
+     - Hitunglah jarak dari data yang akan diklasifikasikan ke semua titik dalam *dataset.*
+     - Urutkan titik-titik tersebut berdasarkan jarak dari yang terkecil hingga terbesar dan pilih ( K ) titik dengan jarak terkecil.
+     - Identifikasi kelas yang paling sering muncul di antara ( K ) titik tersebut.
+     - Klasifikasikan data baru ke dalam kelas yang paling dominan berdasarkan tetangga terdekatnya.
+       
+      <br>
+      <img src="https://user-images.githubusercontent.com/64983961/188507827-0f729ab6-61a5-4dbc-9be2-afa424f6c294.png" alt="Ilustrasi Algoritma K-Nearest Neighbor" title="Ilustrasi Algoritma K-Nearest Neighbor">
+     
+   Perhitungan jarak ke tetangga terdekat dapat dilakukan dengan menggunakan metrik sebagai berikut:
+   
+      - *Euclidean distance*
+            $$d(x,y)=\sqrt{\sum_{i=1}^n (x_i-y_i)^2}$$
+      - *Manhattan distance*
+            $$d(x,y)=\sum_{i=1}^n |x_i-y_i|$$
+      - *Hamming distance*
+            $$d(x,y)=\frac{1}{n}\sum_{n=1}^{n=n} |x_i-y_i|$$
+      - *Minkowski distance*
+            $$d(x,y)=\left(\sum_{i=1}^n |x_i-y_i|^p\right)^\frac{1}{p}$$
+     
+   Kelebihan dari algoritma K-Nearest Neighbor adalah: 
+     - Kesederhanaan dan mudah dipahami
+     - Mudah diterapkan
+     - Berlaku untuk klasifikasi dan regresi
+     - Dapat digunakan pada jumlah kelas yang beragam
+     - Tidak memerlukan proses training
+     - Penambahan data baru yang mudah
+     - Parameter minimal
+     - Hasil pemodelan non-linear, cocok untuk data dengan batasan tidak linear
+     
+   Sedangkan kelemahan dari algoritma K-Nearest Neighbor adalah: 
+     - Penentuan nilai \( K \) yang optimal diperlukan
+     - Biaya komputasi yang besar
+     - Proses yang lambat untuk dataset besar
+     - Performa menurun pada data berdimensi tinggi
+     - Sensitivitas terhadap data *noisy*, data yang hilang, dan *outlier*
+     
 2. **Random Forest Algorithm**  
    ```python
    RF = RandomForestRegressor(n_estimators=50, max_depth=16, random_state=55, n_jobs=-1)
@@ -354,12 +339,47 @@ Langkah selanjutnya adalah menerapkan ketiga algoritma ke dalam *dataframe*
    models.loc['train_mse','RandomForest'] = mean_squared_error(y_pred=RF.predict(X_train), y_true=y_train)
    ```
    
-3. **Adaptive Boosting (AdaBoost) Algorithm**  
+     *Random forest* memperluas metode *bagging* dengan menggabungkan teknik *bagging* dan pemilihan fitur secara acak, menciptakan kumpulan *decision tree* yang independen satu sama lain. Pemilihan fitur acak ini menciptakan subset fitur yang berbeda-beda, yang menjamin bahwa setiap *decision tree* memiliki sedikit kesamaan. Ini membedakan *random forest* dari *decision tree* biasa, yang biasanya mempertimbangkan semua fitur saat membagi data, sementara *random forest* hanya menggunakan sebagian dari fitur-fitur tersebut [[6]](https://www.ibm.com/topics/random-forest#:~:text=Random%20forest%20is%20a%20commonly,Decision%20trees).
+     
+     <img src="https://user-images.githubusercontent.com/64983961/188504775-b7e4aa9b-f1cd-41ef-8a70-a977db8f3d60.png" alt="Ilustrasi Algoritma Random Forest" title="Ilustrasi Algoritma Random Forest">
+     
+      Setelah dilakukan pelatihan, prediksi untuk sampel yang tidak terlihat ($x'$) dapat dibuat dengan menghitung rata-rata prediksi dari semua pohon setiap individu model pada $x'$ [[7]](https://en.wikipedia.org/wiki/Random_forest#Bagging 'Random Forest - Bagging').
+     $$\hat{f}=\frac{1}{B}\sum_{b=1}^{B} f_b(x^{'})$$
+
+      Kelebihan dari algoritma Random Forest adalah: 
+     - Mengurangi risiko overfitting.
+     - Fleksibilitas dalam menangani tugas regresi dan klasifikasi.
+     - Kemudahan dalam mengevaluasi kepentingan fitur.
+     
+      Sedangkan kelemahan dari algoritma Random Forest adalah: 
+     - Proses yang memakan waktu.
+     - Membutuhkan lebih banyak sumber daya.
+     - Lebih kompleks dalam interpretasi.
+   
+4. **Adaptive Boosting (AdaBoost) Algorithm**  
    ```python
    boosting = AdaBoostRegressor(learning_rate=0.05, random_state=55)
    boosting.fit(X_train, y_train)
    models.loc['train_mse','Boosting'] = mean_squared_error(y_pred=boosting.predict(X_train), y_true=y_train)
    ```
+     
+     AdaBoost, yang merupakan kependekan dari *Adaptive Boosting*, merupakan teknik ansambel dalam *machine learning* yang serbaguna, cocok untuk tugas-tugas klasifikasi dan regresi. Sebagai algoritma pembelajaran dengan pengawasan, AdaBoost menggabungkan sejumlah pembelajar dasar, seperti *decision tree*, untuk membentuk model yang lebih kuat. Cara kerja AdaBoost adalah dengan menyesuaikan bobot data latih sesuai dengan keakuratan klasifikasi yang telah dilakukan sebelumnya [[8]](https://www.almabetter.com/bytes/tutorials/data-science/adaboost-algorithm).
+     
+     <img src="https://user-images.githubusercontent.com/64983961/188507801-30224052-cac2-4e99-9c67-2aec18de8e59.png" alt="Ilustrasi Algoritma Adaptive Boosting" title="Ilustrasi Algoritma Adaptive Boosting">
+     
+     Algoritma AdaBoost mengacu kepada metode tertentu untuk melakukan pelatihan *classifier* yang di-*boosted*. Pengklasifikasian tersebut adalah pengklasifikasian dalam bentuk, [[9]](https://en.wikipedia.org/wiki/AdaBoost#Training 'AdaBoost - Training')
+     $$F_T(x)=\sum_{t=q}^{T}f_t(x)$$
+     di mana setiap $F_T$ adalah *learner* yang lemah yang mengambil objek $x$ sebagai input dan mengembalikan nilai yang menunjukkan kelas objek. Demikian juga pada pengklasifikasi $T$ merupakan nilai positif jika sampel berada dalam kelas positif, dan negatif jika sebaliknya.
+
+      Kelebihan dari algoritma AdaBoost adalah: 
+     - Meningkatkan akurasi prediktif.
+     - Adaptif terhadap kasus sulit.
+     - Cepat dan mudah diimplementasikan.
+     - Efektif untuk klasifikasi biner dan multi-kelas.
+     
+      Sedangkan kelemahan dari algoritma AdaBoost adalah: 
+     - Tidak cocok untuk data *noisy*.
+     - Sensitif terhadap *outliers*.
 
 Ketiga model yang telah dirancang —berdasarkan algoritma K-Nearest Neighbor, Random Forest, dan Adaptive Boosting— akan diuji untuk menentukan mana yang memiliki presisi prediksi paling akurat dan tingkat *error* paling minimal.
 
