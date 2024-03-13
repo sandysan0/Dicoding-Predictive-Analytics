@@ -56,7 +56,7 @@ Dari uraian sebelumnya, beberapa langkah strategis telah diidentifikasi untuk me
       car.drop('Model'       , inplace=True, axis=1)
       car.drop('Prod. year'  , inplace=True, axis=1)
    ```
-- Menghilangkan tulisan 'km' dan mengubah tipe data menjadi `int64` dan `float64` supaya lebih mudah untuk melakukan prediksi
+- Menghilangkan tulisan 'km', tulisan 'Turbo', dan mengubah tipe data menjadi `int64` dan `float64` supaya lebih mudah untuk melakukan prediksi
   ```python
      car['Price'] = car['Price'].astype('float64')
      car['Engine volume'] = car['Engine volume'].str.replace(' Turbo', '').astype('float64')
