@@ -48,7 +48,7 @@ Dari uraian sebelumnya, beberapa langkah strategis telah diidentifikasi untuk me
 *Dataset* yang digunakan adalah [Car Price Prediction Challenge](https://www.kaggle.com/datasets/deepcontractor/car-price-prediction-challenge) dalam bentuk `.csv` ([Comma-separated Values](https://en.wikipedia.org/wiki/Comma-separated_values)). 
 
 *Dataset* tersebut masih perlu disesuaikan lagi sebelum digunakan. Berikut penyesuaian-penyesuaian yang dilakukan
-- Menghapus kolom yang tidak ada digunakan karena tidak relevan, sama saja dengan kolom lain, dan tidak menjelaskan apapun, yaitu `ID`, `Levy`, `Manufacturer`, `Model`, dan `Prod. year`
+- Menghapus kolom yang tidak akan digunakan karena tidak relevan, sama saja dengan kolom lain, dan tidak menjelaskan apapun, yaitu `ID`, `Levy`, `Manufacturer`, `Model`, dan `Prod. year`
   ```python
       car.drop('ID'          , inplace=True, axis=1)
       car.drop('Levy'        , inplace=True, axis=1)
